@@ -18,16 +18,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlin.random.Random
 
 class LiveDataActivity: ComponentActivity() {
 
@@ -38,8 +35,6 @@ class LiveDataActivity: ComponentActivity() {
         }
     }
 
-    private val rand = Random(255)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -48,9 +43,9 @@ class LiveDataActivity: ComponentActivity() {
     }
 
     @Composable
-    fun MainScreen() {
-        val namesList = remember { mutableStateMapOf<String, Color>() }
-        val textEditState = remember { mutableStateOf("") }
+    fun MainScreen(vm : LiveDataVM = LiveDataVM()) {
+        val namesListState = vm.nameListState.observeAsState(mutableMapOf())
+        val textEditState = vm.textFieldState.observeAsState("")
 
         Surface(
             color = Color.DarkGray,
@@ -71,13 +66,13 @@ class LiveDataActivity: ComponentActivity() {
                     TextField(
                         modifier = Modifier.weight(1f),
                         value = textEditState.value,
-                        onValueChange = { v -> textEditState.value = v }
+                        onValueChange = { e -> vm.onTextChanged(e) }
                     )
                     Button(
                         onClick = {
                             if (textEditState.value.isEmpty()) return@Button
-                            namesList[textEditState.value] = Color(rand.nextInt())
-                            textEditState.value = ""
+                            vm.addName()
+                            vm.onTextChanged("")
                         }) {
                         Text(
                             text = "Add Name",
@@ -86,7 +81,7 @@ class LiveDataActivity: ComponentActivity() {
                     }
                 }
                 Column {
-                    for (name in namesList) {
+                    for (name in namesListState.value) {
                         Name(name.key, name.value)
                     }
                 }

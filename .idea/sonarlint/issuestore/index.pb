@@ -11,3 +11,5 @@ P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
 s
 Capp/src/main/java/com/example/jctester/livedata/LiveDataActivity.kt,c/b/cb2461783f3e5a9113b58e1e8c62b6dec90b5d4b
+m
+=app/src/main/java/com/example/jctester/livedata/LiveDataVM.kt,1/c/1c12005b1c065c8f53d5c6f8c2fc015570ca42e6

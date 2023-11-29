@@ -55,6 +55,7 @@ dependencies {
 
     // Optional - Integration with activities
     implementation("androidx.activity:activity-compose")
+    implementation("androidx.compose.runtime:runtime-livedata")
 
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
