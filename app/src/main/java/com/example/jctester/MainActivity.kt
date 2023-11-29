@@ -25,11 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.jctester.livedata.LiveDataActivity
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
-
-    private val rand = Random(255)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +39,6 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainScreen() {
-        val namesList = remember { mutableStateMapOf<String, Color>() }
-        val textEditState = remember { mutableStateOf("") }
-
         Surface(
             color = Color.DarkGray,
             modifier = Modifier.fillMaxSize()
@@ -52,55 +48,11 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(80.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TextField(
-                        modifier = Modifier.weight(1f),
-                        value = textEditState.value,
-                        onValueChange = { v -> textEditState.value = v }
-                    )
-                    Button(
-                        onClick = {
-                            if (textEditState.value.isEmpty()) return@Button
-                            namesList[textEditState.value] = Color(rand.nextInt())
-                            textEditState.value = ""
-                        }) {
-                        Text(
-                            text = "Add Name",
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                Button(onClick = {
+                    LiveDataActivity.startActivity(this@MainActivity)
+                }) {
+                    Text(text = "Live Data Activity")
                 }
-                Column {
-                    for (name in namesList) {
-                        Name(name.key, name.value)
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun Name(name: String, bgColor: Color) {
-        Surface(
-            color = bgColor,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.labelMedium.copy(color = Color.White),
-                )
             }
         }
     }
